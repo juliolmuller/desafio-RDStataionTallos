@@ -3,6 +3,7 @@ const sortByScore = require('./sortByScore');
 
 /**
  * Returns a list of CS's that are responsible for 1 or more customers.
+ * ASSESS: complexity of algorithm.
  *
  * @param {Array<{ id: number, score: number }>} css
  * @param {Array<{ id: number, score: number }>} sortedCustomers

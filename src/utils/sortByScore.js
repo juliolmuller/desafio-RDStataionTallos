@@ -1,6 +1,7 @@
 
 /**
  * Orders CS's ascending by their score.
+ * ASSESS: implement more efficient sorting algorithm.
  *
  * @param {Array<object extends { score: number }>} item
  *
