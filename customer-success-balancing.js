@@ -1,19 +1,34 @@
+const { areCssValid } = require('./src/validations/cssValidator');
+const { areCustomersValid } = require('./src/validations/customersValidator');
+const distributeCustomers = require('./src/utils/distributeCustomers');
+const removeCssAway = require('./src/utils/removeCssAway');
+
 /**
- * Returns the id of the CustomerSuccess with the most customers
- * @param {array} customerSuccess
- * @param {array} customers
- * @param {array} customerSuccessAway
+ * Returns the ID of the CustomerSuccess with the most customers
+ * @param {Array<{ id: number, score: number }>} customerSuccess
+ * @param {Array<{ id: number, score: number }>} customers
+ * @param {number[]} customerSuccessAway
+ *
+ * @throws {ValidationError}
  */
 function customerSuccessBalancing(
   customerSuccess,
   customers,
   customerSuccessAway
 ) {
-  /**
-   * ===============================================
-   * =========== Write your solution here ==========
-   * ===============================================
-   */
+  areCssValid(customerSuccess, customerSuccessAway.length);
+  areCustomersValid(customers);
+
+  const availableCss = removeCssAway(customerSuccess, customerSuccessAway);
+  const cssWithCustomers = distributeCustomers(availableCss, customers);
+  const [busiestCs1, busiestCs2] = cssWithCustomers;
+
+  // In case of draw, return "0" instead of an specific ID
+  if (busiestCs1?.customers?.length === busiestCs2?.customers?.length) {
+    return 0;
+  }
+
+  return busiestCs1.id;
 }
 
 test("Scenario 1", () => {
@@ -51,7 +66,7 @@ function mapEntities(arr) {
   }));
 }
 
-function arraySeq(count, startAt){
+function arraySeq(count, startAt) {
   return Array.apply(0, Array(count)).map((it, index) => index + startAt);
 }
 
@@ -114,5 +129,6 @@ test("Scenario 8", () => {
   const css = mapEntities([60, 40, 95, 75]);
   const customers = mapEntities([90, 70, 20, 40, 60, 10]);
   const csAway = [2, 4];
+
   expect(customerSuccessBalancing(css, customers, csAway)).toEqual(1);
 });
